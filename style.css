@@ -1,289 +1,183 @@
-* {
-  margin:0;
-  padding:0;
-  font-family: "Arial",sans-serif;
-  text-decoration: none;}
-html,body{
-  width:100%;
-  height:100%;
-}
-body {
-  background-image: url(https://i.postimg.cc/fLbGkw3G/background2.jpg);
-  background-repeat: no-repeat;
-  background-attachment: space;
-  background-size: cover;
- 
+const DURATION="300ms";
+const INTERVAL=3000;
 
-}
-#container{
-  width: 100%;
-  height: 100%;
-  
-}
+var index=1;
+var isAutoPlay;
+var innerBox=document.querySelector(".inner-box");
+var slideNum=document.querySelectorAll('.slide-ele').length;
 
-.wrap{
-  position:absolute;
-  top: 50%;
-  left: 49%;
-  transform:translate(-50%,-50%);
-  
-}
-.balloon{
-  animation: myjump 1.2s infinite;
-}
-@keyframes myjump{
-  0% {
-    transform:translate(0,0);
-  }
-  
-  50% {
-    transform:translate(0,-30%);
-  }
-  
-  100% {
-    transform:translate(0,0);
+var moveWidth=document.querySelector('.inner-box').offsetWidth;
+var currentOffset=moveWidth;
+var dotItems = document.querySelectorAll('.dots');
+
+var animate;
+function changeDotsStyle() {
+ document.querySelector('.dots.dots-active').classList.remove('dots-active');
+  if(index==slideNum){
+    dotItems[0].classList.add('dots-active');
+  }else{
+    dotItems[index - 1].classList.add('dots-active');
   }
 }
 
-@keyframes jumpout{
-  0% {
-    top:50%;
+function carousel(dur=DURATION){
+  innerBox.addEventListener('transitionend', () => {
+  if(index==slideNum+1){
+index=1;
+currentOffset = moveWidth;
+changeBoxLoc(0,"0ms");
+}
+} )
+if(index<=slideNum){
+
+currentOffset = moveWidth * (index-1);
+changeBoxLoc(-currentOffset,dur);
+index++;
+}
+
+
+}
+function changeBoxLoc(offset,duration="0ms"){
+  changeDotsStyle() ;
+  innerBox.style.transform=`translateX(${offset}px)`;
+
+  innerBox.style.transitionDuration=duration;
+}
+
+
+
+function autoPlay(){
+  if(isAutoPlay){ return; }
+	isAutoPlay = true;
+  animate=setInterval(carousel,INTERVAL)
+}
+
+function stopAutoPlay() {
+	if(!isAutoPlay){ return; }
+	isAutoPlay = false;
+	clearInterval(animate);
+}
+
+
+
+function changePageStyle(){
+
+  var bodyTag=document.getElementsByTagName("body")[0];
+  bodyTag.onclick=function(){
+
+    var balloon=document.getElementsByClassName("balloon")[0];
+    //balloon.style.animation='jumpout 1.2s ease ';
+        var firstPage=document.getElementsByClassName("first-page");
+
+    var secondPage=document.getElementsByClassName("second-page");
+        for(let i=0;i<firstPage.length;i++){
+      firstPage[i].style.animation='jumpout 1.2s 1';
+     setTimeout(function(){
+      firstPage[i].style.display='none';
+     },1200);
+    }
+    for(let i=0;i<secondPage.length;i++){
+      setTimeout(function(){
+        secondPage[i].style.display='block';
+        moveWidth=document.querySelector('.slide-ele').offsetWidth+0.7;
+       },1200);
+    }
+    bodyTag.onclick=null;
   }
-  
-  100% {
-    top:-10%;
-    
-  }
-}
-.second-wrap{
-  width:1170px;
-  height:100%;
-  
-}
 
-#head{
-  width:1170px;
-  height:68px;
-  padding:15px;
-  text-align: center;
- 
-}
-
-@keyframes myjump2{
-  0% {
-    transform:translate(0,40%);
-  }
-  
-  50% {
-    transform:translate(0,-10%);
-  }
-  
-  100% {
-    transform:translate(0,40%);
-  }
-}
-
-#head .logo{
-  width:58px;
-  height:58px;
- margin: 0 10px;
- animation: myjump2 1.8s infinite;
-}
-#head .name{
-  font-size:35px;
-  color:#23436e; 
-   font-style:italic;
-   font-family:'cursive';
-   font-weight: 555;
-   text-shadow: 3px 3px 1px #c2d5ebc9;
-   -webkit-text-stroke: 0.2px rgb(253, 250, 250)
-}
-
-#main{
-  width:1170px;
-  height:510px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top:18px;
- 
-}
-
-
-#main-right{
-  border-left: 1px solid white;
-  width:41%;
-  height:510px;
-  background-color: rgba(255, 255, 255, 0.911);
-  border-top-right-radius: 20px;
-  border-bottom-right-radius: 20px;
-  box-shadow: 3px 4px 4px #adbfc5c0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-#login-box{
-  width:75%;
-  height: 75%;
-}
-
-.login-title{
-  width:46%;
-  text-align: center;
-  color: #d3d3d3;
-  margin-bottom:35px;
-  padding-bottom: 15px;
-  font-weight: 545;
-  cursor: pointer;
-  transition: all 0.5s;
-}
-#pswd-title{
-  margin-left:5px;
-  float:left;
-}
-#code-title{
-  float:right;
-}
-.login-active{
-  border-bottom:3px solid #a9c7e7af;
-  color:#555151;
-}
-
-.login-form{
-  width:100%;
-  height:80%;
-  display: none;
-}
-.form-active{
-  display: block;
-}
-
-
-.textbox{
-  width:90%;
-  height:55px;
-  background-color: #f0f0f0;
-  overflow: hidden;
-  border-radius: 55px;
-  font-size: 18px;
-  padding:0 5px 0 15px;
-  margin:25px 0;
-
-}
-.textbox i{
-  text-align: center;
-  line-height: 55px;
-  color:#757070;
-  font-size: 15px;
-}
-.textbox input{
-  margin-left: 15px;
-  background: none;
-  
-  outline: none;
-  border:none;
-  line-height: 1;
-  font-weight: 530;
-  font-size: 15px;
-  color: #333;
-}
-.textbox input::placeholder{
-  color:#868686;
-  font-weight: 500;
-}
-.textbox input:hover::placeholder{
-  color:#b8b8b8;
-}
-.send-code-btn{
-
-  width:75px;
-  font-size: 13px;
-  padding-left:5px;
-  border:0px;
-  border-left:1px solid #b8b8b8;
-  cursor: pointer;
-  color:#757070;
-}
-.send-code-btn:hover{
-  color:#555151
-}
-.sign-up-btn{
-width:150px;
-height:49px;
-border:none;
-outline: none;
-border-radius: 49px;
-cursor: pointer;
-background-color: #79a5f1;
-color:#fff;
-text-transform:uppercase;
-margin:5px auto 20px auto;
-transition: all 0.5s;
-
-}
-.btn:hover{
-  background-color: #5d88d1;
-}
-.hold-pswd-box{
-  float:left;
-}
-.hold-login-box{
-  float: left;
-}
-.isSignup{
-  float:right;
 }
 
 
 
+function changeLogin(){
+loginTitle=document.querySelectorAll('.login-title');
+loginForm=document.querySelectorAll('.login-form');
+for(tit of loginTitle)
+{
+  tit.addEventListener("click",(e)=>{
 
-#main-left{
-  width:41%;
-  height:510px;
-  background-color: rgba(255, 255, 255, 0.603);
-  /*border-top-left-radius: 20px;
-  border-bottom-left-radius: 20px;
-  */
-  
-  background-repeat: no-repeat;
-  background-attachment: space;
-  background-size: cover;
-  opacity: 0.7;
-  
+    titleIndex=e.target.getAttribute('title-index')
+    formIndex=document.querySelector('.form-active').getAttribute('form-index');
+    if(titleIndex!=formIndex){
+    activeTitle=document.querySelector('.login-active').classList.remove('login-active');
+    activeForm=document.querySelector('.form-active').classList.remove('form-active');
+    loginTitle[titleIndex-1].classList.add('login-active')
+    loginForm[titleIndex-1].classList.add('form-active');
+    }
+  })
 }
-
-.outer-box{
-  position: relative;
-  height:100%;
-  width: 100%;
-  overflow: hidden;
-}
-.inner-box{
-  height:100%;
-  width: 100%;
-  display: flex;
 }
 
 
-.dots-box{
-  position: absolute;
-  bottom:45px;
+window.onload = function() {
+  changeLogin();
+  changePageStyle();
+  autoPlay();
+  dotsControl();
 
-  left:50%;
-  transform: translateX(-50%);
+}
+var overlay = document.getElementById("overlay");
+
+// Buttons to 'switch' the page
+var openSignUpButton = document.getElementById("slide-left-button");
+var openSignInButton = document.getElementById("slide-right-button");
+
+// The sidebars
+var leftText = document.getElementById("sign-in");
+var rightText = document.getElementById("sign-up");
+
+// The forms
+var accountForm = document.getElementById("sign-in-info")
+var signinForm = document.getElementById("sign-up-info");
+
+// Open the Sign Up page
+openSignUp = () =>{
+  // Remove classes so that animations can restart on the next 'switch'
+  leftText.classList.remove("overlay-text-left-animation-out");
+  overlay.classList.remove("open-sign-in");
+  rightText.classList.remove("overlay-text-right-animation");
+  // Add classes for animations
+  accountForm.className += " form-left-slide-out"
+  rightText.className += " overlay-text-right-animation-out";
+  overlay.className += " open-sign-up";
+  leftText.className += " overlay-text-left-animation";
+  // hide the sign up form once it is out of view
+  setTimeout(function(){
+    accountForm.classList.remove("form-left-slide-in");
+    accountForm.style.display = "none";
+    accountForm.classList.remove("form-left-slide-out");
+  }, 700);
+  // display the sign in form once the overlay begins moving right
+  setTimeout(function(){
+    signinForm.style.display = "flex";
+    signinForm.classList += " form-right-slide-in";
+  }, 200);
 }
 
-.dots{
-  margin: 0 4px;
-  width:8px;
-  height:8px;
-  display:inline-block;
-  border-radius: 100%;
-  background-color: #fff;
-  
+// Open the Sign In page
+openSignIn = () =>{
+  // Remove classes so that animations can restart on the next 'switch'
+  leftText.classList.remove("overlay-text-left-animation");
+  overlay.classList.remove("open-sign-up");
+  rightText.classList.remove("overlay-text-right-animation-out");
+  // Add classes for animations
+  signinForm.classList += " form-right-slide-out";
+  leftText.className += " overlay-text-left-animation-out";
+  overlay.className += " open-sign-in";
+  rightText.className += " overlay-text-right-animation";
+  // hide the sign in form once it is out of view
+  setTimeout(function(){
+    signinForm.classList.remove("form-right-slide-in")
+    signinForm.style.display = "none";
+    signinForm.classList.remove("form-right-slide-out")
+  },700);
+  // display the sign up form once the overlay begins moving left
+  setTimeout(function(){
+    accountForm.style.display = "flex";
+    accountForm.classList += " form-left-slide-in";
+  },200);
 }
- .dots-active{
-  width: 28px;
-  background: #79a5f1;
-  border-radius: 5px;
-}
+
+// When a 'switch' button is pressed, switch page
+openSignUpButton.addEventListener("click", openSignUp, false);
+openSignInButton.addEventListener("click", openSignIn, false);
