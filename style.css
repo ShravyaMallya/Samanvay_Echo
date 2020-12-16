@@ -35,7 +35,7 @@ changeBoxLoc(-currentOffset,dur);
 index++;
 }
 
-
+  
 }
 function changeBoxLoc(offset,duration="0ms"){
   changeDotsStyle() ;
@@ -61,14 +61,14 @@ function stopAutoPlay() {
 
 
 function changePageStyle(){
-
+  
   var bodyTag=document.getElementsByTagName("body")[0];
   bodyTag.onclick=function(){
-
+    
     var balloon=document.getElementsByClassName("balloon")[0];
     //balloon.style.animation='jumpout 1.2s ease ';
         var firstPage=document.getElementsByClassName("first-page");
-
+    
     var secondPage=document.getElementsByClassName("second-page");
         for(let i=0;i<firstPage.length;i++){
       firstPage[i].style.animation='jumpout 1.2s 1';
@@ -84,7 +84,7 @@ function changePageStyle(){
     }
     bodyTag.onclick=null;
   }
-
+ 
 }
 
 
@@ -95,7 +95,7 @@ loginForm=document.querySelectorAll('.login-form');
 for(tit of loginTitle)
 {
   tit.addEventListener("click",(e)=>{
-
+     
     titleIndex=e.target.getAttribute('title-index')
     formIndex=document.querySelector('.form-active').getAttribute('form-index');
     if(titleIndex!=formIndex){
