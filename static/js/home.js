@@ -11,3 +11,6 @@ $(document).ready(function() {
 			event.stopPropagation();
 		});
 	});
+	$('.card').on('click', function() {
+	$(this).toggleClass('js-trigger');
+});
