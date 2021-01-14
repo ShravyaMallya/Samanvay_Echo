@@ -17,6 +17,10 @@ def homePage():
 def model():
     return render_template('3dmodel.html')
 
+@app.route('/learn')
+def learn():
+    return render_template('learn.html')
+
 
 if __name__ == '__main__':
     app.run(debug = True)
